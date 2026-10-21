@@ -1,0 +1,55 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Credentials and private keys
+*.pem
+*.key
+credentials.json
+secrets.json
+
+# Local database files and private exports
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+# Dependencies
+vendor/
+node_modules/
+
+# User uploads and private submissions
+**/uploads/
+**/storage/app/private/
+
+# Logs, caches, and generated files
+*.log
+.cache/
+**/storage/logs/
+**/storage/framework/cache/
+**/storage/framework/sessions/
+**/storage/framework/views/
+**/bootstrap/cache/
+
+# Local configuration containing secrets
+**/config/config.php
+**/config/mail.php
+
+# Local development tool metadata
+.freebuff/
+**/.freebuff/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Project backups
+**/*-backup-*/
+**/*_backup*/
+**/backup/
