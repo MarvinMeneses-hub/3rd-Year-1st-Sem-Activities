@@ -3,148 +3,311 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Live links to my Web Systems and Technologies laboratory activities.">
-  <title>IT Laboratories | Marvin Meneses</title>
+  <meta name="theme-color" content="#151416">
+  <meta name="description" content="Marvin M. Meneses — Web System and Technology laboratory activities and independent projects portfolio.">
+  <title>Marvin Meneses | Academic Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --navy: #14213d;
-      --blue: #2457c5;
-      --sky: #eaf1ff;
-      --ink: #1d2939;
-      --muted: #667085;
-      --paper: #f6f8fc;
-      --white: #ffffff;
-      --border: #e4e9f2;
-      --gold: #e9b949;
+      --pink: #E99AAF;
+      --pink-soft: #FCE7ED;
+      --canvas: #FFFFFF;
+      --slate: #66535A;
+      --ink: #30252A;
+      --rose: #A83E61;
+      --gold: #FFE2A0;
+      --night: #151416;
+      --line: #F0DDE3;
+      --surface: #FFF7F9;
+      --green: #26734D;
+      --green-soft: #E8F6EE;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top right, rgba(36,87,197,.10), transparent 30rem),
-        var(--paper);
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      line-height: 1.6;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body { min-height: 100vh; font-family: "DM Sans", sans-serif; background: var(--canvas); color: var(--ink); }
+    button, a { font: inherit; }
+    a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #B64D70; outline-offset: 5px; }
+    .welcome-screen {
+      position: fixed; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;
+      overflow: hidden; padding: 28px 20px; color: #F8EDF0;
+      background: radial-gradient(ellipse at 50% 70%, #272126 0%, #1B191C 38%, #111113 78%);
+      transition: opacity 1.25s ease, visibility 1.25s ease;
     }
-    .wrap { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
-    header { padding: 54px 0 32px; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 12px; border-radius: 999px;
-      background: var(--sky); color: var(--blue);
-      font-size: .82rem; font-weight: 800; letter-spacing: .04em;
-      text-transform: uppercase;
+    .welcome-screen::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .2;
+      background-image: radial-gradient(#FFF 0.5px, transparent 0.5px); background-size: 7px 7px;
+      mask-image: linear-gradient(to bottom, transparent, black 70%, transparent);
     }
-    h1 { margin: 18px 0 10px; color: var(--navy); font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.12; }
-    .intro { max-width: 680px; color: var(--muted); font-size: 1.05rem; margin: 0; }
-    .student { margin-top: 18px; color: var(--navy); font-weight: 700; }
-    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin: 24px 0 16px; }
-    .section-heading h2 { margin: 0; color: var(--navy); font-size: 1.45rem; }
-    .section-heading p { margin: 0; color: var(--muted); font-size: .9rem; }
-    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding-bottom: 38px; }
-    .card {
-      display: flex; flex-direction: column; min-height: 220px;
-      padding: 24px; background: var(--white); border: 1px solid var(--border);
-      border-radius: 20px; box-shadow: 0 8px 26px rgba(20,33,61,.045);
+    .welcome-screen::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+      background: radial-gradient(ellipse at 50% 52%, rgba(255,218,150,.36), rgba(241,184,198,.12) 35%, transparent 72%);
+      transition: opacity 2s ease;
     }
-    .card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-    .number {
-      width: 48px; height: 48px; display: grid; place-items: center;
-      border-radius: 14px; background: var(--sky); color: var(--blue);
-      font-size: 1.05rem; font-weight: 900;
-    }
-    .status { color: #18794e; background: #e9f8ef; padding: 5px 9px; border-radius: 999px; font-size: .75rem; font-weight: 800; white-space: nowrap; }
-    .status.pending { color: #8a5a00; background: #fff4d6; }
-    .card h3 { margin: 17px 0 5px; color: var(--navy); font-size: 1.18rem; }
-    .card p { margin: 0 0 20px; color: var(--muted); font-size: .94rem; }
-    .action {
-      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-      width: fit-content; margin-top: auto; padding: 10px 15px;
-      border-radius: 11px; color: white; background: var(--blue);
-      text-decoration: none; font-weight: 750; font-size: .9rem;
-      transition: transform .15s ease, background .15s ease;
-    }
-    .action:hover { background: #1946a6; transform: translateY(-1px); }
-    .action.secondary { background: var(--navy); }
-    .action.secondary:hover { background: #263b63; }
-    .note {
-      margin: 0 0 34px; padding: 18px 20px; border-left: 4px solid var(--gold);
-      background: #fff9e9; border-radius: 0 12px 12px 0; color: #6b5314;
-      font-size: .93rem;
-    }
-    footer { border-top: 1px solid var(--border); padding: 22px 0 32px; color: var(--muted); font-size: .88rem; }
-    footer a { color: var(--blue); font-weight: 700; text-decoration: none; }
-    @media (max-width: 680px) {
-      header { padding-top: 36px; }
-      .grid { grid-template-columns: 1fr; }
-      .section-heading { align-items: start; flex-direction: column; }
-      .card { min-height: 205px; }
+    .welcome-screen.lamp-on::after { opacity: 1; }
+    .welcome-screen.leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: min(100%, 520px); text-align: center; transform: translateY(-10px); }
+    .intro-eyebrow { margin-bottom: 15px; color: #9D9299; font-size: 10px; font-weight: 700; letter-spacing: .25em; text-transform: uppercase; }
+    .intro-title { font-family: "Playfair Display", serif; font-size: clamp(2rem, 6vw, 3.3rem); font-weight: 500; line-height: 1.15; letter-spacing: -.035em; }
+    .intro-title span { color: var(--pink); font-style: italic; }
+    .intro-description { max-width: 330px; margin-top: 14px; color: #B8ADB3; font-size: 13px; line-height: 1.8; }
+    .lamp-button { position: relative; display: flex; align-items: center; justify-content: center; width: min(100%, 350px); height: 340px; margin-top: 3px; border: 0; border-radius: 50%; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .lamp-button:focus-visible { outline: 2px solid rgba(255,226,160,.7); outline-offset: -14px; }
+    .lamp-halo { position: absolute; top: 20%; left: 50%; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,219,151,.05), rgba(255,219,151,.015) 42%, transparent 70%); opacity: .75; transform: translateX(-50%); transition: all 1.5s ease; }
+    .lamp-button:hover .lamp-halo { background: radial-gradient(circle, rgba(255,219,151,.12), rgba(255,219,151,.025) 50%, transparent 72%); }
+    .lamp-beam { position: absolute; top: 29%; left: 50%; width: 0; height: 0; border-left: 112px solid transparent; border-right: 112px solid transparent; border-top: 215px solid rgba(255,220,155,0); filter: blur(14px); transform: translateX(-50%); transform-origin: top center; transition: border-top-color 1.8s ease, filter 1.8s ease, transform 1.8s ease; }
+    .lamp-illustration { position: relative; z-index: 2; width: 190px; height: 255px; overflow: visible; filter: drop-shadow(0 5px 12px rgba(0,0,0,.4)); transition: filter 1.5s ease; }
+    .lamp-bulb { fill: #766A5D; transition: fill 1.3s ease, filter 1.3s ease; }
+    .lamp-shade { fill: #373239; stroke: #5B5158; stroke-width: 1.2; transition: fill 1.3s ease, stroke 1.3s ease; }
+    .lamp-stem { stroke: #4C444A; stroke-width: 7; stroke-linecap: round; transition: stroke 1.3s ease; }
+    .lamp-base { fill: #393238; stroke: #5A5056; stroke-width: 1; transition: fill 1.3s ease; }
+    .lamp-floor-light { position: absolute; bottom: 26px; left: 50%; width: 110px; height: 15px; border-radius: 50%; background: rgba(255,217,145,0); filter: blur(10px); transform: translateX(-50%); transition: all 1.8s ease; }
+    .lamp-instruction { margin-top: -9px; color: #B8ADB3; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; animation: breathe 2.6s ease-in-out infinite; }
+    .lamp-instruction span { display: inline-block; margin-right: 7px; color: var(--pink); }
+    .intro-footer { position: absolute; bottom: 25px; color: #80757D; font-size: 10px; letter-spacing: .12em; text-align: center; }
+    .welcome-screen.lamp-on .lamp-bulb { fill: #FFF0C4; filter: drop-shadow(0 0 8px #FFE7AC) drop-shadow(0 0 24px #FFCB70) drop-shadow(0 0 44px rgba(255,194,95,.85)); }
+    .welcome-screen.lamp-on .lamp-shade { fill: #67505A; stroke: #A78B83; }
+    .welcome-screen.lamp-on .lamp-stem { stroke: #A18B7C; }
+    .welcome-screen.lamp-on .lamp-base { fill: #65515A; }
+    .welcome-screen.lamp-on .lamp-halo { width: 430px; height: 430px; background: radial-gradient(circle, rgba(255,224,163,.38), rgba(255,205,133,.16) 33%, rgba(241,184,198,.07) 52%, transparent 72%); }
+    .welcome-screen.lamp-on .lamp-beam { border-top-color: rgba(255,222,162,.27); filter: blur(22px); transform: translateX(-50%) scale(1.55); }
+    .welcome-screen.lamp-on .lamp-floor-light { width: 270px; height: 42px; background: rgba(255,217,145,.36); box-shadow: 0 0 45px 25px rgba(255,217,145,.12); }
+    .welcome-screen.lamp-on .lamp-instruction { color: #FFE5B0; animation: none; }
+    .welcome-screen.lamp-on .lamp-illustration { filter: drop-shadow(0 0 24px rgba(255,211,136,.25)); }
+    .dust { position: absolute; z-index: 1; width: 3px; height: 3px; border-radius: 50%; background: #FFE5B0; opacity: 0; box-shadow: 0 0 8px rgba(255,222,162,.9); pointer-events: none; }
+    .welcome-screen.lamp-on .dust { animation: floatDust 3s ease-in-out infinite; }
+    .dust-one { top: 44%; left: 30%; animation-delay: .1s; } .dust-two { top: 53%; left: 69%; animation-delay: .7s; }
+    .dust-three { top: 62%; left: 38%; animation-delay: 1.1s; } .dust-four { top: 39%; left: 63%; animation-delay: 1.5s; }
+    .dust-five { top: 70%; left: 57%; animation-delay: .4s; } .dust-six { top: 48%; left: 45%; animation-delay: 1.8s; }
+    @keyframes floatDust { 0%,100% { opacity: 0; transform: translateY(10px) scale(.6); } 45% { opacity: .8; transform: translateY(-14px) scale(1); } }
+    @keyframes breathe { 0%,100% { opacity: .65; } 50% { opacity: 1; } }
+
+    .portfolio { min-height: 100vh; opacity: 0; visibility: hidden; background: #FFF; transition: opacity 1.2s ease; }
+    .portfolio.is-visible { opacity: 1; visibility: visible; }
+    .portfolio-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px clamp(22px,7vw,100px); border-bottom: 1px solid #F4E5E9; background: #FFF; }
+    .brand { color: var(--ink); font-family: "Playfair Display",serif; font-size: 20px; font-weight: 600; text-decoration: none; letter-spacing: -.04em; }
+    .brand span { color: #D95F82; }
+    .header-note { color: #725B63; font-size: 11px; letter-spacing: .08em; text-align: right; text-transform: uppercase; line-height: 1.7; }
+    .hero { position: relative; overflow: hidden; padding: clamp(70px,12vw,135px) clamp(22px,10vw,150px) clamp(70px,10vw,110px); background: radial-gradient(ellipse at 86% 15%,rgba(255,211,224,.72),transparent 36%), radial-gradient(ellipse at 8% 95%,rgba(255,237,242,.85),transparent 35%), linear-gradient(120deg,#FFF 0%,#FFFDFE 55%,#FFF4F7 100%); }
+    .hero::after { content: ""; position: absolute; right: -90px; bottom: -200px; width: 390px; height: 390px; border: 1px solid rgba(217,95,130,.23); border-radius: 50%; box-shadow: 0 0 0 35px rgba(217,95,130,.045),0 0 0 75px rgba(217,95,130,.025); pointer-events: none; }
+    .hero-label { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; color: var(--rose); font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+    .hero-label::before { content: ""; width: 24px; height: 2px; background: var(--pink); }
+    .hero h1 { max-width: 850px; font-family: "Playfair Display",serif; font-size: clamp(2.6rem,7vw,6.1rem); font-weight: 500; line-height: 1.03; letter-spacing: -.055em; color: var(--ink); }
+    .hero h1 span { color: #C7476C; font-style: italic; }
+    .hero-description { max-width: 570px; margin-top: 26px; color: var(--slate); font-size: clamp(13px,1.5vw,15px); line-height: 1.9; }
+    .hero-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 28px; margin-top: 34px; color: var(--slate); font-size: 12px; }
+    .hero-bottom span { display: inline-flex; align-items: center; gap: 8px; }
+    .hero-bottom span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 3px var(--pink-soft); }
+    .content-section { padding: 76px clamp(22px,10vw,150px) 82px; background: #FFF; }
+    .content-section.alt { background: #FFFAFB; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 30px; }
+    .section-eyebrow { margin-bottom: 9px; color: var(--rose); font-size: 10px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+    .section-heading h2 { font-family: "Playfair Display",serif; font-size: clamp(2rem,4vw,3rem); font-weight: 500; letter-spacing: -.04em; color: var(--ink); }
+    .section-description { max-width: 520px; margin-top: 10px; color: var(--slate); font-size: 13px; line-height: 1.8; }
+    .project-count { padding-bottom: 6px; color: #725B63; font-size: 12px; white-space: nowrap; }
+    .project-list { border-top: 1px solid var(--line); }
+    .project-card { display: grid; grid-template-columns: 65px minmax(0,1fr) auto; align-items: center; gap: 22px; padding: 26px 12px; border-bottom: 1px solid var(--line); background: transparent; transition: padding .3s ease,background .3s ease,box-shadow .3s ease; }
+    .project-card:hover { padding-right: 20px; padding-left: 20px; background: #FFF7F9; box-shadow: inset 3px 0 var(--pink); }
+    .project-number { color: #C66A85; font-family: "Playfair Display",serif; font-size: 21px; }
+    .project-info h3 { color: var(--ink); font-size: 15px; font-weight: 700; letter-spacing: -.02em; line-height: 1.5; }
+    .project-info p { margin-top: 6px; color: var(--slate); font-size: 12px; line-height: 1.8; }
+    .project-type { display: inline-block; margin-top: 10px; padding: 6px 10px; border: 1px solid #F6D6E0; border-radius: 20px; background: #FFF0F4; color: #963C5B; font-size: 10px; font-weight: 700; }
+    .project-type.green { border-color: #CBE8D7; background: var(--green-soft); color: var(--green); }
+    .project-link { display: inline-flex; align-items: center; gap: 9px; padding: 9px 0 9px 12px; color: var(--rose); font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; transition: color .2s ease; }
+    .project-link:hover { color: #71233F; }
+    .project-link span { font-size: 17px; transition: transform .2s ease; }
+    .project-link:hover span { transform: translate(3px,-3px); }
+    .future-note { margin-top: 22px; padding: 17px 19px; border: 1px dashed #E8B4C4; border-radius: 12px; background: #FFFAFB; color: #725B63; font-size: 12px; line-height: 1.8; }
+    .future-note strong { color: var(--rose); }
+    .project-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+    .independent-card { display: flex; flex-direction: column; align-items: flex-start; min-height: 230px; padding: 26px; border: 1px solid #F0DDE3; border-radius: 16px; background: #FFF; box-shadow: 0 8px 26px rgba(91,43,59,.035); transition: transform .25s ease,border-color .25s ease,box-shadow .25s ease; }
+    .independent-card:hover { transform: translateY(-4px); border-color: #E7A6B9; box-shadow: 0 14px 32px rgba(91,43,59,.08); }
+    .project-icon { display: grid; place-items: center; width: 46px; height: 46px; margin-bottom: 20px; border-radius: 13px; background: var(--pink-soft); color: var(--rose); }
+    .project-icon svg { width: 22px; height: 22px; }
+    .independent-card h3 { font-family: "Playfair Display",serif; font-size: 23px; font-weight: 600; line-height: 1.3; }
+    .independent-card p { margin-top: 9px; color: var(--slate); font-size: 12px; line-height: 1.8; }
+    .independent-card .project-type { margin-top: 13px; }
+    .independent-card .project-link { margin-top: auto; padding: 20px 0 0; }
+    .portfolio-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; padding: 25px clamp(22px,10vw,150px); border-top: 1px solid var(--line); background: var(--surface); color: var(--slate); font-size: 11px; }
+    .github-link,.back-to-top { color: #8E405A; text-decoration: none; transition: color .2s ease; }
+    .github-link:hover,.back-to-top:hover { color: #B83F66; text-decoration: underline; }
+    @media (min-width: 1200px) { .project-list { max-width: 1100px; } }
+    @media (max-width: 700px) {
+      .intro-content { transform: translateY(-4px); }
+      .intro-eyebrow { font-size: 9px; letter-spacing: .2em; }
+      .intro-description { font-size: 12px; }
+      .lamp-button { height: 300px; margin-top: 4px; }
+      .lamp-illustration { width: 165px; height: 230px; }
+      .lamp-halo { width: 220px; height: 220px; }
+      .welcome-screen.lamp-on .lamp-halo { width: 330px; height: 330px; }
+      .lamp-beam { border-left-width: 85px; border-right-width: 85px; border-top-width: 190px; }
+      .intro-footer { right: 15px; bottom: 16px; left: 15px; font-size: 9px; }
+      .portfolio-header { padding: 19px 22px; }
+      .brand { font-size: 18px; }
+      .header-note { max-width: 145px; font-size: 9px; line-height: 1.6; }
+      .hero { padding-top: 76px; padding-bottom: 72px; }
+      .hero-description { line-height: 1.85; }
+      .content-section { padding-top: 56px; padding-bottom: 62px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .project-card { grid-template-columns: 34px minmax(0,1fr); gap: 12px; padding: 23px 0; }
+      .project-card:hover { padding-right: 8px; padding-left: 8px; }
+      .project-number { font-size: 17px; }
+      .project-info h3 { font-size: 14px; }
+      .project-info p { font-size: 12px; }
+      .project-link { grid-column: 2; justify-self: start; margin-top: -4px; padding-left: 0; }
+      .project-grid { grid-template-columns: 1fr; }
+      .independent-card { min-height: 215px; padding: 23px; }
+      .portfolio-footer { align-items: flex-start; flex-direction: column; padding-top: 25px; padding-bottom: 25px; }
     }
   </style>
 </head>
 <body>
-  <header class="wrap">
-    <span class="eyebrow">Web Systems and Technologies</span>
-    <h1>My IT Laboratories</h1>
-    <p class="intro">Welcome! Use the links below to open each laboratory activity for checking. Each activity is kept in its own project folder.</p>
-    <p class="student">Marvin M. Meneses</p>
-  </header>
+  <!-- Interactive lamp introduction -->
+  <section class="welcome-screen" id="welcomeScreen" aria-label="Welcome">
+    <div class="dust dust-one" aria-hidden="true"></div><div class="dust dust-two" aria-hidden="true"></div>
+    <div class="dust dust-three" aria-hidden="true"></div><div class="dust dust-four" aria-hidden="true"></div>
+    <div class="dust dust-five" aria-hidden="true"></div><div class="dust dust-six" aria-hidden="true"></div>
+    <main class="intro-content">
+      <p class="intro-eyebrow">Web System and Technology</p>
+      <h1 class="intro-title">A little light,<br><span>a world of ideas.</span></h1>
+      <p class="intro-description">Every project starts with a spark. Turn on the light and explore my work.</p>
+      <button class="lamp-button" id="lampButton" type="button" aria-label="Turn on the lamp and enter the portfolio">
+        <div class="lamp-halo" aria-hidden="true"></div><div class="lamp-beam" aria-hidden="true"></div>
+        <svg class="lamp-illustration" viewBox="0 0 190 255" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs><linearGradient id="shadeGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#554B54"/><stop offset="100%" stop-color="#29252B"/></linearGradient></defs>
+          <path class="lamp-shade" fill="url(#shadeGradient)" d="M48 67 L142 67 L123 23 Q120 17 112 17 L78 17 Q70 17 67 23 Z"/>
+          <path d="M45 67 Q95 75 145 67" fill="none" stroke="#73636D" stroke-width="3" stroke-linecap="round"/>
+          <path class="lamp-bulb" d="M82 67 Q82 54 75 46 Q68 38 70 31 Q72 17 95 17 Q118 17 120 31 Q122 38 115 46 Q108 54 108 67 Z" opacity=".95"/>
+          <path d="M84 65 L106 65 L103 75 L87 75 Z" fill="#8E7B70"/><path d="M88 69 L103 69 M89 73 L102 73" stroke="#C8AD8F" stroke-width="1.5" stroke-linecap="round"/>
+          <path class="lamp-stem" d="M95 78 L95 211"/><path d="M93 86 L93 198" stroke="#9A8581" stroke-opacity=".25" stroke-width="1.5" stroke-linecap="round"/>
+          <path class="lamp-base" d="M67 211 Q95 203 123 211 L135 226 Q95 236 55 226 Z"/>
+          <ellipse cx="95" cy="225" rx="40" ry="7" fill="#262126" opacity=".8"/><path d="M66 216 Q95 222 124 216" fill="none" stroke="#8A737D" stroke-opacity=".4" stroke-width="1.2"/>
+        </svg>
+        <div class="lamp-floor-light" aria-hidden="true"></div>
+      </button>
+      <p class="lamp-instruction" id="lampInstruction"><span>✦</span> Click the lamp to begin</p>
+    </main>
+    <p class="intro-footer">MARVIN M. MENESES &nbsp;·&nbsp; WEB SYSTEM AND TECHNOLOGY</p>
+  </section>
 
-  <main class="wrap">
-    <div class="section-heading">
-      <h2>Laboratory Activities</h2>
-      <p>Select a laboratory to open it.</p>
-    </div>
+  <div class="portfolio" id="portfolio">
+    <header class="portfolio-header" id="top">
+      <a class="brand" href="https://marvinmeneses-hub.github.io/3rd-Year-1st-Sem-Activities/" target="_blank" rel="noopener noreferrer">marvin<span>.</span> (Main Portfolio)</a>
+      <p class="header-note">Web System and Technology<br>Academic Portfolio</p>
+    </header>
 
-    <section class="grid" aria-label="Laboratory links">
-      <article class="card">
-        <div class="card-top"><div class="number">01</div><span class="status">Live page</span></div>
-        <h3>Laboratory 1</h3>
-        <p>Open the first HTML laboratory activity.</p>
-        <a class="action" href="./lab1_2411600030/lab1.html">Open Lab 1 <span aria-hidden="true">↗</span></a>
-      </article>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <p class="hero-label">My academic portfolio</p>
+        <h1 id="hero-title">Hello, I'm<br>Marvin <span>Meneses.</span></h1>
+        <p class="hero-description">A collection of my Web System and Technology laboratory activities and independent projects, documenting my learning journey through web development, programming, and application design.</p>
+        <div class="hero-bottom">
+          <span>5 laboratory activities</span><span>Independent projects</span><span>BS Information Technology</span>
+        </div>
+      </section>
 
-      <article class="card">
-        <div class="card-top"><div class="number">02</div><span class="status">Live page</span></div>
-        <h3>Laboratory 2</h3>
-        <p>Open the second laboratory website.</p>
-        <a class="action" href="./lab2_2411600030/index.html">Open Lab 2 <span aria-hidden="true">↗</span></a>
-      </article>
+      <section class="content-section" id="laboratories" aria-labelledby="labs-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-eyebrow">Coursework</p>
+            <h2 id="labs-title">Laboratory Activities</h2>
+            <p class="section-description">Practical activities completed for Web System and Technology. New laboratory entries can be added here as they are assigned.</p>
+          </div>
+          <p class="project-count">01 — 05 / Labs</p>
+        </div>
+        <div class="project-list">
+          <article class="project-card">
+            <span class="project-number">01</span><div class="project-info"><h3>Laboratory 1</h3><p>My first laboratory activity for the course.</p><span class="project-type">Web Development</span></div>
+            <a class="project-link" href="./lab1_2411600030/lab1.html" target="_blank" rel="noopener noreferrer">View activity <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="project-card">
+            <span class="project-number">02</span><div class="project-info"><h3>Laboratory 2</h3><p>A continuation of my practical work in web development.</p><span class="project-type">Web Development</span></div>
+            <a class="project-link" href="./lab2_2411600030/index.html" target="_blank" rel="noopener noreferrer">View activity <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="project-card">
+            <span class="project-number">03</span><div class="project-info"><h3>Laboratory 3</h3><p>Building technical and programming skills through practice.</p><span class="project-type">Web Development</span></div>
+            <a class="project-link" href="./lab3_2411600030/index.html" target="_blank" rel="noopener noreferrer">View activity <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="project-card">
+            <span class="project-number">04</span><div class="project-info"><h3>Laboratory 4</h3><p>Applying course concepts in a practical web application.</p><span class="project-type">Web Application</span></div>
+            <a class="project-link" href="./lab4_2411600030/index.html" target="_blank" rel="noopener noreferrer">View activity <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="project-card">
+            <span class="project-number">05</span><div class="project-info"><h3>Laboratory 5 — Inventory Management</h3><p>A Laravel-based inventory management project. Open its source repository to explore the project files.</p><span class="project-type">Laravel · PHP</span></div>
+            <a class="project-link" href="https://github.com/MarvinMeneses-hub/IT-Laboratories-WEB/tree/main/lab5_2411600030/inventory-management-main" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a>
+          </article>
+        </div>
+        <div class="future-note"><strong>More activities coming:</strong> Future laboratory activities can be added to this list without mixing them with independent projects.</div>
+      </section>
 
-      <article class="card">
-        <div class="card-top"><div class="number">03</div><span class="status">Live page</span></div>
-        <h3>Laboratory 3</h3>
-        <p>Open the login and dashboard project.</p>
-        <a class="action" href="./lab3_2411600030/index.html">Open Lab 3 <span aria-hidden="true">↗</span></a>
-      </article>
+      <section class="content-section alt" id="independent-projects" aria-labelledby="independent-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-eyebrow">Beyond coursework</p>
+            <h2 id="independent-title">Independent Projects</h2>
+            <p class="section-description">Projects maintained separately from the laboratory activities, with source-code links for exploring the work.</p>
+          </div>
+          <p class="project-count">Personal &amp; extended work</p>
+        </div>
+        <div class="project-grid">
+          <article class="independent-card">
+            <div class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h.01M15 10h.01M9 14h.01M15 14h.01M10 21v-4h4v4"/></svg>
+            </div>
+            <h3>Banking System</h3>
+            <p>A Laravel/PHP application project maintained in a separate repository. Visit the source repository to review the available code and project documentation.</p>
+            <span class="project-type">Laravel · PHP</span>
+            <a class="project-link" href="https://github.com/MarvinMeneses-hub/banking-system-WEB" target="_blank" rel="noopener noreferrer">Explore source repository <span aria-hidden="true">↗</span></a>
+          </article>
+          <article class="independent-card">
+            <div class="project-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8M8 11h8"/></svg>
+            </div>
+            <h3>More projects</h3>
+            <p>This space is ready for additional independent projects as they are completed. Each project can have its own summary and source or live-demo link.</p>
+            <span class="project-type">Expandable portfolio</span>
+            <a class="project-link" href="#independent-projects">Project section <span aria-hidden="true">↓</span></a>
+          </article>
+        </div>
+      </section>
+    </main>
 
-      <article class="card">
-        <div class="card-top"><div class="number">04</div><span class="status">Live page</span></div>
-        <h3>Laboratory 4</h3>
-        <p>Open the enhanced dashboard and data management project.</p>
-        <a class="action" href="./lab4_2411600030/index.html">Open Lab 4 <span aria-hidden="true">↗</span></a>
-      </article>
+    <footer class="portfolio-footer">
+      <p>© <span id="currentYear"></span> Marvin M. Meneses</p>
+      <a class="github-link" href="https://github.com/MarvinMeneses-hub/3rd-Year-1st-Sem-Activities" target="_blank" rel="noopener noreferrer">Back to 3rd Year 1st Sem Main Portfolio ↗</a>
+      <a class="back-to-top" href="#top">Back to top ↑</a>
+    </footer>
+  </div>
 
-      <article class="card">
-        <div class="card-top"><div class="number">05</div><span class="status pending">Needs PHP hosting</span></div>
-        <h3>Laboratory 5 — Laravel Inventory</h3>
-        <p>This is a Laravel/PHP application. GitHub Pages cannot run PHP, so it must be deployed to a PHP-compatible host to be checked live.</p>
-        <a class="action secondary" href="https://github.com/MarvinMeneses-hub/IT-Laboratories/tree/main/lab5_2411600030/inventory-management-main" target="_blank" rel="noopener noreferrer">View Lab 5 source <span aria-hidden="true">↗</span></a>
-      </article>
-    </section>
+  <script>
+    (() => {
+      "use strict";
+      const welcomeScreen = document.getElementById("welcomeScreen");
+      const lampButton = document.getElementById("lampButton");
+      const lampInstruction = document.getElementById("lampInstruction");
+      const portfolio = document.getElementById("portfolio");
+      const currentYear = document.getElementById("currentYear");
+      let lampActivated = false;
 
-    <aside class="note">
-      <strong>Note for checking:</strong> Labs 1–4 will open as live pages after GitHub Pages is enabled for this repository. Lab 5's source code is available above, but the running Laravel application needs separate PHP hosting.
-    </aside>
-  </main>
+      currentYear.textContent = new Date().getFullYear();
 
-  <footer>
-    <div class="wrap">
-      <span>© <span id="year">2026</span> Marvin M. Meneses · IT Laboratories</span>
-      &nbsp;·&nbsp;
-      <a href="https://github.com/MarvinMeneses-hub/IT-Laboratories" target="_blank" rel="noopener noreferrer">View GitHub repository</a>
-    </div>
-  </footer>
+      function turnOnLamp() {
+        if (lampActivated) return;
+        lampActivated = true;
+        lampButton.disabled = true;
+        lampButton.setAttribute("aria-label", "Lamp turned on");
+        lampInstruction.textContent = "Let there be light...";
+        welcomeScreen.classList.add("lamp-on");
+
+        window.setTimeout(() => portfolio.classList.add("is-visible"), 1100);
+        window.setTimeout(() => welcomeScreen.classList.add("leaving"), 1900);
+        window.setTimeout(() => { welcomeScreen.style.display = "none"; }, 3200);
+      }
+
+      lampButton.addEventListener("click", turnOnLamp);
+    })();
+  </script>
 </body>
 </html>
