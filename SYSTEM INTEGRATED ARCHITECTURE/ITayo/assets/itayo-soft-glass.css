@@ -1,0 +1,659 @@
+/* =====================================================================
+   ITayo Soft Glass skin  (v1)
+   ---------------------------------------------------------------------
+   Loaded AFTER assets/edubridge.css by includes/header.php.
+   It only changes how existing pages LOOK. No page markup, PHP logic,
+   routes, forms or JavaScript hooks are touched.
+
+   TO ROLL BACK: delete the <link> to this file in includes/header.php.
+   Your previous design returns immediately.
+
+   Design source: itayo-soft-glass-v5 prototype.
+   Accessibility changes vs the prototype (measured contrast ratios):
+     - muted text darkened (3.6:1 -> 4.7:1 on the page background)
+     - primary-button gradient deepened (white text 2.9:1 -> 5.6:1)
+     - minimum text size raised from 8-9px to 11px+
+   ===================================================================== */
+
+/* ---------- 1. Design tokens ---------- */
+html body.itayo-glass{
+  --ig-bg:#e8ebef;
+  --ig-surface:rgba(255,255,255,.74);
+  --ig-surface-2:rgba(224,229,235,.76);
+  --ig-ink:#29313d;
+  --ig-muted:#5a6574;
+  --ig-line:rgba(117,130,146,.25);
+  --ig-rose:#d98cae;
+  --ig-rose-strong:#bd6e93;
+  --ig-rose-ink:#8f4468;
+  --ig-rose-soft:rgba(216,140,174,.14);
+  --ig-btn-a:#b4577f;
+  --ig-btn-b:#9c456d;
+  --ig-shadow-soft:0 6px 22px rgba(36,48,66,.05);
+  --ig-font:'DM Sans',Inter,system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --ig-display:Manrope,'DM Sans',Inter,system-ui,sans-serif;
+  --ig-emblem:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23000' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='50' cy='50' r='13'/%3E%3Ccircle cx='50' cy='50' r='5'/%3E%3Cpath d='M50 9C58 20 58 29 50 37C42 29 42 20 50 9Z'/%3E%3Cpath d='M50 63C58 71 58 80 50 91C42 80 42 71 50 63Z'/%3E%3Cpath d='M9 50C20 42 29 42 37 50C29 58 20 58 9 50Z'/%3E%3Cpath d='M63 50C71 42 80 42 91 50C80 58 71 58 63 50Z'/%3E%3Cpath d='M21 21C34 22 41 29 42 42C29 41 22 34 21 21Z'/%3E%3Cpath d='M58 58C71 59 78 66 79 79C66 78 59 71 58 58Z'/%3E%3Cpath d='M79 21C78 34 71 41 58 42C59 29 66 22 79 21Z'/%3E%3Cpath d='M42 58C41 71 34 78 21 79C22 66 29 59 42 58Z'/%3E%3Cpath d='M46 50C47 43 56 42 59 48C62 54 55 60 49 56C45 53 47 48 51 47'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* Re-point the old variables so any rule still using them matches */
+  --ink:var(--ig-ink);
+  --muted:var(--ig-muted);
+  --line:var(--ig-line);
+
+  color:var(--ig-ink);
+  font-family:var(--ig-font);
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.92),transparent 42%),
+    radial-gradient(ellipse at 90% 10%,rgba(198,207,218,.5),transparent 36%),
+    var(--ig-bg);
+  background-attachment:fixed;
+}
+
+/* Headings use Manrope (zero specificity so page-specific rules still win) */
+:where(html body.itayo-glass) :where(h1,h2,h3,h4){font-family:var(--ig-display);letter-spacing:-.02em}
+
+/* ---------- 2. Sidebar + brand ---------- */
+html body.itayo-glass .sidebar{
+  background:rgba(255,255,255,.80);
+  border-right:1px solid var(--ig-line);
+  box-shadow:8px 0 30px rgba(49,58,72,.05);
+  -webkit-backdrop-filter:blur(20px) saturate(130%);
+  backdrop-filter:blur(20px) saturate(130%);
+}
+@media (max-width:760px){
+  /* Opaque enough to read over page content when the menu is open */
+  html body.itayo-glass .sidebar{background:rgba(246,248,250,.98)}
+}
+
+html body.itayo-glass .brand{gap:12px}
+html body.itayo-glass .brand strong{font:800 22px/1.1 var(--ig-display);letter-spacing:-.04em;color:var(--ig-ink)}
+html body.itayo-glass .brand span{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--ig-muted)}
+
+/* Teal emblem replaces the graduation-cap icon on every page, with no markup edits */
+html body.itayo-glass .brand-mark,
+html body.ig-login-page .ig-brand-mark{
+  width:42px;height:42px;flex:0 0 42px;border-radius:14px;border:0;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#e0f7f4,#a7e3dc 58%,#6fc6bd);
+  color:#087f78;
+  box-shadow:0 3px 0 rgba(8,127,120,.12),0 10px 20px rgba(8,127,120,.18),inset 0 2px 3px rgba(255,255,255,.9);
+}
+html body.itayo-glass .brand-mark i{display:none}
+html body.itayo-glass .brand-mark::before,
+html body.ig-login-page .ig-brand-mark::before{
+  content:"";width:30px;height:30px;background-color:currentColor;
+  -webkit-mask:var(--ig-emblem) center/contain no-repeat;
+  mask:var(--ig-emblem) center/contain no-repeat;
+}
+
+/* ---------- 3. Navigation ---------- */
+html body.itayo-glass .nav a{
+  min-height:42px;border:1px solid transparent;border-radius:12px;
+  color:var(--ig-muted);font-size:13px;font-weight:600;
+  transition:background .18s ease,color .18s ease;
+}
+html body.itayo-glass .nav a:hover{background:rgba(224,229,235,.75);color:var(--ig-rose-ink);border-color:transparent}
+html body.itayo-glass .nav a.active,
+html body.itayo-glass .nav a[aria-current="page"]{
+  background:var(--ig-rose-soft);color:var(--ig-rose-ink);
+  border-color:transparent;box-shadow:inset 3px 0 var(--ig-rose);
+}
+html body.itayo-glass .nav-sep{height:1px;background:var(--ig-line);margin:10px 4px}
+
+/* ---------- 4. Topbar ---------- */
+html body.itayo-glass .topbar{
+  background:rgba(255,255,255,.72);
+  border-bottom:1px solid var(--ig-line);
+  box-shadow:0 8px 28px rgba(49,58,72,.04);
+  -webkit-backdrop-filter:blur(18px) saturate(130%);
+  backdrop-filter:blur(18px) saturate(130%);
+}
+html body.itayo-glass .topbar h1{font-weight:800;letter-spacing:-.03em;color:var(--ig-ink)}
+html body.itayo-glass .eyebrow{color:var(--ig-rose-ink);font-size:10px;font-weight:800;letter-spacing:.12em}
+
+html body.itayo-glass .user-chip{padding:4px 14px 4px 4px;border:1px solid var(--ig-line);border-radius:999px;background:var(--ig-surface)}
+@media (max-width:760px){html body.itayo-glass .user-chip{padding:4px}}
+html body.itayo-glass .avatar{
+  border:0;border-radius:50%;box-shadow:none;
+  background:linear-gradient(135deg,#f7d9e8,#e9b6d0);
+  color:#7a3d5d;font-weight:800;
+}
+
+/* ---------- 5. Cards, welcome banner, stats ---------- */
+html body.itayo-glass .card,
+html body.itayo-glass .welcome,
+html body.itayo-glass .stat{
+  background:var(--ig-surface);
+  border:1px solid var(--ig-line);
+  box-shadow:var(--ig-shadow-soft),inset 0 1px 0 rgba(255,255,255,.8);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  backdrop-filter:blur(18px) saturate(125%);
+}
+html body.itayo-glass .card{border-radius:18px}
+html body.itayo-glass .stat{border-radius:16px;align-items:center}
+html body.itayo-glass .stat strong{font-family:var(--ig-display);font-weight:800;letter-spacing:-.04em;color:var(--ig-ink)}
+html body.itayo-glass .stat small{color:var(--ig-muted);font-weight:600}
+
+html body.itayo-glass .welcome{
+  position:relative;overflow:hidden;border-radius:22px;
+  background:linear-gradient(112deg,var(--ig-rose-soft),rgba(255,255,255,.82) 65%,rgba(224,229,235,.7));
+  border-color:rgba(189,110,147,.22);
+}
+html body.itayo-glass .welcome>*{position:relative;z-index:1}
+html body.itayo-glass .welcome::after{
+  content:"";position:absolute;z-index:0;right:-50px;top:-60px;width:240px;height:240px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 35% 28%,#fff,rgba(217,140,174,.24) 70%);
+  box-shadow:inset -12px -12px 25px rgba(217,140,174,.14);
+}
+html body.itayo-glass .welcome h2{font-weight:800;letter-spacing:-.04em}
+
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass .card:hover,
+  html body.itayo-glass .stat:hover,
+  html body.itayo-glass .welcome:hover{
+    border-color:rgba(189,110,147,.35);
+    box-shadow:0 14px 34px rgba(47,57,71,.09),inset 0 1px 0 rgba(255,255,255,.85);
+  }
+}
+
+html body.itayo-glass .stat-icon{
+  width:40px;height:40px;border-radius:12px;border:0;
+  background:var(--ig-rose-soft);color:var(--ig-rose-ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 5px 12px rgba(65,77,94,.08);
+}
+/* Soft colour variety across a row of stats, as in the prototype */
+html body.itayo-glass .grid>.stat:nth-child(4n+2) .stat-icon{background:#f0ebfb;color:#65519a}
+html body.itayo-glass .grid>.stat:nth-child(4n+3) .stat-icon{background:#e9f7f1;color:#2a6f55}
+html body.itayo-glass .grid>.stat:nth-child(4n+4) .stat-icon{background:#fff0e7;color:#8a4f2b}
+
+html body.itayo-glass .section-head h2,
+html body.itayo-glass .section-head h3{font-weight:800;letter-spacing:-.03em}
+
+/* ---------- 6. Buttons ---------- */
+html body.itayo-glass .btn{font-family:var(--ig-font);font-size:13px;font-weight:700;border-radius:11px}
+html body.itayo-glass .btn-primary{
+  color:#fff;
+  background:linear-gradient(115deg,var(--ig-btn-a),var(--ig-btn-b));
+  box-shadow:0 8px 18px rgba(156,69,109,.24),inset 0 1px 0 rgba(255,255,255,.28);
+}
+html body.itayo-glass .btn-soft{color:var(--ig-rose-ink);background:rgba(255,255,255,.80);border:1px solid var(--ig-line)}
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass .btn-soft:not(:disabled):hover{background:var(--ig-rose-soft);border-color:rgba(189,110,147,.35)}
+}
+html body.itayo-glass .btn-danger{color:#9a3f4b;background:#fae4e7;border:1px solid rgba(154,63,75,.15)}
+html body.itayo-glass .btn-dark{background:#2f3947;color:#fff}
+
+/* ---------- 7. Badges, notices, toasts, empty states ---------- */
+html body.itayo-glass .badge{border:0;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:800;background:rgba(216,140,174,.16);color:var(--ig-rose-ink)}
+html body.itayo-glass .badge.green{background:#e9f7f0;color:#2a6f55}
+html body.itayo-glass .badge.gray{background:rgba(224,229,235,.9);color:var(--ig-muted)}
+html body.itayo-glass .badge.purple{background:#f0ebfb;color:#65519a}
+
+html body.itayo-glass .notice{
+  background:var(--ig-rose-soft);color:var(--ig-rose-ink);
+  border:1px solid rgba(189,110,147,.25);border-radius:12px;font-size:13px;
+}
+html body.itayo-glass .notice a{color:inherit;font-weight:700}
+
+html body.itayo-glass .toast{
+  background:rgba(255,255,255,.92);color:var(--ig-ink);
+  border:1px solid var(--ig-line);border-radius:12px;font-size:13px;
+}
+html body.itayo-glass .empty{color:var(--ig-muted)}
+html body.itayo-glass .empty i{color:var(--ig-rose)}
+
+/* ---------- 8. Lists and tables ---------- */
+html body.itayo-glass .list-row{
+  background:rgba(255,255,255,.55);border:1px solid var(--ig-line);
+  border-radius:14px;box-shadow:none;
+}
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass .list-row:hover{
+    background:rgba(216,140,174,.10);border-color:rgba(189,110,147,.30);
+    box-shadow:0 8px 20px rgba(47,57,71,.07);
+  }
+}
+html body.itayo-glass .list-main strong{font-weight:700;color:var(--ig-ink)}
+html body.itayo-glass .list-main span{color:var(--ig-muted)}
+
+html body.itayo-glass .table th,
+html body.itayo-glass .table td{border-bottom:1px solid var(--ig-line)}
+html body.itayo-glass .table th{color:var(--ig-muted);font-size:11px;font-weight:800;letter-spacing:.06em}
+html body.itayo-glass .table tbody tr:hover td{background:rgba(216,140,174,.08)}
+
+/* ---------- 9. Forms ---------- */
+html body.itayo-glass .form-group label{font-size:12px;font-weight:700;color:var(--ig-ink)}
+html body.itayo-glass .input,
+html body.itayo-glass .select,
+html body.itayo-glass .textarea{
+  font-family:var(--ig-font);font-size:14px;color:var(--ig-ink);
+  border:1px solid var(--ig-line);border-radius:12px;
+}
+/* background-color only, so the custom dropdown arrow on .select is kept */
+html body.itayo-glass .input,
+html body.itayo-glass .textarea{background-color:rgba(255,255,255,.86)}
+html body.itayo-glass .input:focus,
+html body.itayo-glass .select:focus,
+html body.itayo-glass .textarea:focus{border-color:var(--ig-rose-strong);box-shadow:0 0 0 4px rgba(217,140,174,.18)}
+html body.itayo-glass .input:focus,
+html body.itayo-glass .textarea:focus{background-color:#fff}
+@media (max-width:760px){
+  /* 16px stops iPhones zooming the page when a field is focused */
+  html body.itayo-glass .input,html body.itayo-glass .select,html body.itayo-glass .textarea{font-size:16px}
+}
+
+/* ---------- 10. Mobile menu buttons + focus ---------- */
+html body.itayo-glass .nav-toggle,
+html body.itayo-glass .nav-close{
+  background:rgba(255,255,255,.92);border:1px solid var(--ig-line);color:var(--ig-rose-ink);
+}
+html body.itayo-glass a:focus-visible,
+html body.itayo-glass button:focus-visible,
+html body.itayo-glass .btn:focus-visible,
+html body.itayo-glass .nav a:focus-visible,
+html body.itayo-glass .input:focus-visible,
+html body.itayo-glass .select:focus-visible,
+html body.itayo-glass .textarea:focus-visible{outline:3px solid rgba(189,110,147,.55);outline-offset:2px}
+
+
+/* =====================================================================
+   LOGIN PAGE  (login.php uses body.ig-login-page and .ig-* classes)
+   ===================================================================== */
+html body.ig-login-page{
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 8% 8%,rgba(255,226,240,.95),transparent 42%),
+    radial-gradient(ellipse at 92% 90%,rgba(244,196,220,.50),transparent 40%),
+    #f6eef3;
+  background-attachment:fixed;
+}
+.ig-login{
+  min-height:100vh;display:grid;
+  grid-template-columns:minmax(340px,.92fr) minmax(360px,1.08fr);
+  gap:clamp(20px,3vw,42px);padding:clamp(18px,3vw,42px);
+}
+.ig-login-card{
+  width:100%;max-width:490px;margin:auto;
+  padding:clamp(28px,3.4vw,48px);border-radius:28px;
+  background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 28px 70px rgba(179,103,142,.16),inset 0 1px 0 rgba(255,255,255,.9);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  backdrop-filter:blur(22px) saturate(140%);
+}
+.ig-brand{display:flex;align-items:center;gap:13px;margin-bottom:clamp(26px,3vw,38px)}
+.ig-brand b{display:block;font:800 26px/1.1 var(--ig-display);letter-spacing:-.04em;color:var(--ig-ink)}
+.ig-brand small{display:block;margin-top:3px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--ig-muted)}
+
+.ig-eyebrow{margin:0 0 10px;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--ig-rose-ink)}
+.ig-login-copy h1{margin:0;font:800 clamp(29px,3vw,36px)/1.12 var(--ig-display);letter-spacing:-.04em;color:var(--ig-ink)}
+.ig-login-copy p:last-child{margin:10px 0 22px;font-size:15px;line-height:1.6;color:var(--ig-muted)}
+
+.ig-alert{
+  margin:0 0 6px;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5;
+  background:rgba(216,140,174,.14);border:1px solid rgba(189,110,147,.28);color:var(--ig-rose-ink);
+}
+.ig-alert+.ig-alert{margin-top:8px}
+
+.ig-field{display:block;margin-top:16px}
+.ig-label{display:block;margin:0 0 8px;font-size:13px;font-weight:700;color:var(--ig-ink)}
+.ig-input{
+  display:flex;align-items:center;gap:11px;height:50px;padding:0 8px 0 14px;
+  border:1px solid rgba(189,110,147,.24);border-radius:14px;
+  background:rgba(255,255,255,.72);color:var(--ig-muted);
+  transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.ig-input:focus-within{border-color:var(--ig-rose-strong);background:#fff;box-shadow:0 0 0 4px rgba(217,140,174,.18)}
+.ig-input input{
+  flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;
+  font:500 16px var(--ig-font);color:var(--ig-ink);
+}
+.ig-input input::placeholder{color:#667180;opacity:1}
+.ig-toggle{
+  width:38px;height:38px;flex:0 0 38px;border:0;border-radius:10px;background:transparent;
+  color:var(--ig-muted);display:grid;place-items:center;cursor:pointer;
+}
+.ig-toggle:hover{background:var(--ig-rose-soft);color:var(--ig-rose-ink)}
+.ig-toggle:focus-visible{outline:3px solid rgba(189,110,147,.55);outline-offset:1px}
+
+.ig-forgot{margin:12px 0 20px;text-align:right}
+.ig-forgot a{font-size:13px;font-weight:700;color:var(--ig-rose-ink);text-decoration:none}
+.ig-forgot a:hover{text-decoration:underline}
+
+.ig-submit{
+  width:100%;min-height:50px;border:0;border-radius:14px;cursor:pointer;
+  font:700 15px var(--ig-font);color:#fff;
+  background:linear-gradient(120deg,var(--ig-btn-a),var(--ig-btn-b));
+  box-shadow:0 10px 22px rgba(156,69,109,.26),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.ig-submit:hover{transform:translateY(-1px);box-shadow:0 14px 26px rgba(156,69,109,.30),inset 0 1px 0 rgba(255,255,255,.35)}
+.ig-submit:active{transform:translateY(0)}
+.ig-submit:focus-visible,.ig-google:focus-visible{outline:3px solid rgba(189,110,147,.55);outline-offset:3px}
+
+.ig-or{display:flex;align-items:center;gap:12px;margin:22px 0;font-size:12px;font-weight:700;color:var(--ig-muted)}
+.ig-or::before,.ig-or::after{content:"";flex:1;height:1px;background:rgba(117,130,146,.28)}
+
+.ig-google{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;min-height:50px;box-sizing:border-box;padding:12px 16px;
+  border:1px solid rgba(117,130,146,.30);border-radius:14px;
+  background:rgba(255,255,255,.80);color:var(--ig-ink);
+  font:700 14px var(--ig-font);text-decoration:none;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.ig-google:hover{background:#fff;border-color:rgba(189,110,147,.45);transform:translateY(-1px)}
+.ig-note{margin:20px 0 0;text-align:center;font-size:12px;line-height:1.6;color:var(--ig-muted)}
+
+/* Right-hand art panel */
+.ig-art{
+  position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  min-height:560px;border-radius:30px;border:1px solid rgba(255,255,255,.7);
+  background:
+    radial-gradient(ellipse at 25% 20%,rgba(255,255,255,.88),transparent 34%),
+    linear-gradient(140deg,#fbe4ef 0%,#f8d8e8 48%,#f3e6f0 100%);
+}
+.ig-orbit{
+  position:absolute;border-radius:50%;border:1px solid rgba(207,111,152,.23);
+  box-shadow:0 0 35px rgba(207,111,152,.06),inset 0 0 35px rgba(255,255,255,.25);
+  animation:ig-breathe 8s ease-in-out infinite;
+}
+.ig-orbit.a{width:480px;height:480px}
+.ig-orbit.b{width:350px;height:350px;animation-delay:1s;animation-direction:reverse}
+.ig-glass{
+  position:relative;z-index:1;max-width:420px;margin:24px;
+  padding:clamp(28px,3vw,42px);border-radius:28px;
+  background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.82);
+  box-shadow:0 25px 65px rgba(161,91,128,.14),inset 0 1px 0 rgba(255,255,255,.9);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+.ig-glass-icon{
+  width:58px;height:58px;margin-bottom:24px;border-radius:19px;display:grid;place-items:center;
+  font-size:23px;color:var(--ig-rose-ink);
+  background:linear-gradient(145deg,#fff,#f8d9e8);box-shadow:0 10px 24px rgba(207,111,152,.15);
+}
+.ig-glass h2{margin:0 0 14px;font:800 clamp(28px,3vw,38px)/1.14 var(--ig-display);letter-spacing:-.04em;color:#2c2430}
+.ig-glass h2 em{font-style:normal;color:var(--ig-rose-ink)}
+.ig-glass p{margin:0 0 22px;font-size:15px;line-height:1.7;color:#5a4453}
+.ig-pills{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.ig-pills li{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:24px;
+  background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.85);
+  font-size:13px;font-weight:600;color:#5f4457;
+}
+.ig-caption{position:absolute;left:0;right:0;bottom:26px;text-align:center;font-size:12px;color:#6f5466}
+
+@keyframes ig-breathe{0%,100%{transform:scale(1);opacity:.82}50%{transform:scale(1.035);opacity:1}}
+
+@media (max-width:900px){
+  .ig-login{grid-template-columns:minmax(0,1fr);max-width:620px;margin:0 auto;gap:16px;padding:20px}
+  .ig-art{order:2;min-height:320px}
+}
+@media (max-width:600px){
+  .ig-login{padding:12px;gap:12px}
+  .ig-login-card{padding:26px 20px;border-radius:22px}
+  .ig-art{display:none}
+}
+@media (min-width:901px) and (max-height:760px){
+  .ig-art{min-height:500px}
+  .ig-login-card{padding:28px 34px}
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html body.itayo-glass *,html body.itayo-glass *::before,html body.itayo-glass *::after,
+  .ig-orbit,.ig-submit,.ig-google,.ig-input{animation:none!important;transition:none!important}
+}
+
+
+/* =====================================================================
+   ITayo Soft Glass refinements (v2)
+   ---------------------------------------------------------------------
+   Additive visual overrides. Original rules above are intentionally kept.
+   No sidebar positioning or mobile-menu behavior is changed.
+   ===================================================================== */
+
+/* ---------- 11. Rhythm, surface depth, and hierarchy ---------- */
+html body.itayo-glass{
+  --ig-surface:rgba(255,255,255,.84);
+  --ig-surface-2:rgba(232,236,241,.88);
+  --ig-muted:#4e5a6b;
+  --ig-line:rgba(105,119,137,.26);
+  --ig-shadow-soft:0 8px 24px rgba(36,48,66,.065);
+}
+
+html body.itayo-glass .content{
+  padding:clamp(16px,2.1vw,30px);
+}
+
+html body.itayo-glass .grid{
+  gap:clamp(14px,1.6vw,24px);
+}
+
+html body.itayo-glass .card{
+  padding:clamp(18px,1.8vw,26px);
+  border-radius:20px;
+  transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease;
+}
+
+html body.itayo-glass .stat{
+  padding:clamp(16px,1.6vw,22px);
+  border-radius:18px;
+  transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease;
+}
+
+html body.itayo-glass .welcome{
+  padding:clamp(22px,2.5vw,34px);
+  border-radius:24px;
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  backdrop-filter:blur(22px) saturate(135%);
+}
+
+html body.itayo-glass .card,
+html body.itayo-glass .stat,
+html body.itayo-glass .welcome{
+  background-color:var(--ig-surface);
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  backdrop-filter:blur(22px) saturate(135%);
+  box-shadow:var(--ig-shadow-soft),inset 0 1px 0 rgba(255,255,255,.88);
+}
+
+html body.itayo-glass .stat strong{
+  font-size:clamp(26px,2.3vw,34px);
+  line-height:1.08;
+}
+
+html body.itayo-glass .topbar{
+  background:rgba(255,255,255,.84);
+  -webkit-backdrop-filter:blur(22px) saturate(135%);
+  backdrop-filter:blur(22px) saturate(135%);
+}
+
+html body.itayo-glass .topbar h1{
+  letter-spacing:-.035em;
+}
+
+html body.itayo-glass .eyebrow{
+  font-size:11px;
+  line-height:1.4;
+  letter-spacing:.11em;
+}
+
+html body.itayo-glass .section-head{
+  gap:12px;
+  margin-bottom:18px;
+}
+
+html body.itayo-glass .section-head h2,
+html body.itayo-glass .section-head h3{
+  line-height:1.2;
+}
+
+html body.itayo-glass .list-row{
+  padding:14px 16px;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+
+/* Gentle hover feedback on pointer devices only */
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass .card:hover,
+  html body.itayo-glass .stat:hover,
+  html body.itayo-glass .welcome:hover{
+    transform:translateY(-2px);
+    border-color:rgba(189,110,147,.38);
+    box-shadow:0 14px 30px rgba(47,57,71,.085),inset 0 1px 0 rgba(255,255,255,.9);
+  }
+
+  html body.itayo-glass .list-row:hover{
+    transform:translateY(-1px);
+  }
+}
+
+/* ---------- 12. Touch targets and accessible focus ---------- */
+html body.itayo-glass .nav a{
+  min-height:44px;
+  display:flex;
+  align-items:center;
+}
+
+html body.itayo-glass .btn,
+html body.itayo-glass .nav-toggle,
+html body.itayo-glass .nav-close{
+  min-height:44px;
+}
+
+html body.itayo-glass .nav-toggle,
+html body.itayo-glass .nav-close{
+  min-width:44px;
+}
+
+html body.itayo-glass a:focus-visible,
+html body.itayo-glass button:focus-visible,
+html body.itayo-glass .btn:focus-visible,
+html body.itayo-glass .nav a:focus-visible,
+html body.itayo-glass .input:focus-visible,
+html body.itayo-glass .select:focus-visible,
+html body.itayo-glass .textarea:focus-visible,
+html body.ig-login-page a:focus-visible,
+html body.ig-login-page button:focus-visible,
+html body.ig-login-page input:focus-visible{
+  outline:3px solid #a84472;
+  outline-offset:3px;
+}
+
+html body.itayo-glass .input,
+html body.itayo-glass .select,
+html body.itayo-glass .textarea{
+  min-height:44px;
+  font-size:16px;
+}
+
+html body.ig-login-page .ig-toggle{
+  min-width:44px;
+  min-height:44px;
+}
+
+html body.ig-login-page .ig-input{
+  min-height:52px;
+}
+
+/* ---------- 13. Responsive refinements ---------- */
+@media (max-width:1024px){
+  html body.itayo-glass .content{
+    padding:clamp(16px,2.4vw,24px);
+  }
+
+  html body.itayo-glass .card{
+    padding:clamp(18px,2vw,24px);
+  }
+}
+
+@media (max-width:760px){
+  html body.itayo-glass .content{
+    padding:16px;
+  }
+
+  html body.itayo-glass .grid{
+    gap:14px;
+  }
+
+  html body.itayo-glass .section-head{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  html body.itayo-glass .stat{
+    padding:16px;
+  }
+
+  html body.itayo-glass .welcome{
+    padding:22px 18px;
+  }
+
+  html body.itayo-glass .table{
+    max-width:100%;
+  }
+}
+
+@media (max-width:420px){
+  html body.itayo-glass .content{
+    padding:12px;
+  }
+
+  html body.itayo-glass .card{
+    padding:16px;
+    border-radius:16px;
+  }
+
+  html body.itayo-glass .stat{
+    padding:14px;
+  }
+
+  html body.itayo-glass .stat strong{
+    font-size:26px;
+  }
+
+  html body.itayo-glass .welcome{
+    padding:18px 16px;
+    border-radius:18px;
+  }
+
+  html body.itayo-glass .brand strong{
+    font-size:20px;
+  }
+
+  .ig-login{
+    padding:12px;
+  }
+
+  .ig-login-card{
+    padding:24px 18px;
+  }
+
+  .ig-brand b{
+    font-size:24px;
+  }
+}
+
+/* ---------- 14. Reduced motion, including the standalone login page ---------- */
+@media (prefers-reduced-motion:reduce){
+  html body.itayo-glass *,
+  html body.itayo-glass *::before,
+  html body.itayo-glass *::after,
+  html body.ig-login-page *,
+  html body.ig-login-page *::before,
+  html body.ig-login-page *::after{
+    animation:none!important;
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+
+  html body.itayo-glass .card,
+  html body.itayo-glass .stat,
+  html body.itayo-glass .welcome,
+  html body.itayo-glass .list-row,
+  .ig-submit,
+  .ig-google{
+    transform:none!important;
+  }
+}

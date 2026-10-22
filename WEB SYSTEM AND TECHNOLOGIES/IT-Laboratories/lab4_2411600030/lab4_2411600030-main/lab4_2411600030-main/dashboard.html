@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvin M. Meneses - Student & Inventory Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-page">
+
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="#">Marvin's Portal</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#inventory">Inventory</a></li>
+                <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                <li class="nav-item"><button id="logoutButton" class="btn btn-outline-light btn-sm ms-lg-3 mt-2 mt-lg-0">Logout</button></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-lg-2 sidebar">
+            <div class="text-center mb-4">
+                <img src="image1.jpg" alt="Marvin M. Meneses" class="dashboard-profile">
+                <h5 class="mt-3">Marvin M. Meneses</h5>
+                <small>BS Information Technology</small>
+            </div>
+            <hr>
+            <div class="sidebar-menu">
+                <a href="#dashboard" class="sidebar-link active">🏠 Dashboard</a>
+                <a href="#about" class="sidebar-link">👤 About Me</a>
+                <a href="#inventory" class="sidebar-link">📦 Inventory</a>
+                <a href="#skills" class="sidebar-link">💻 Skills</a>
+                <a href="#projects" class="sidebar-link">📁 Projects</a>
+                <a href="#contact" class="sidebar-link">📞 Contact</a>
+            </div>
+        </aside>
+
+        <main class="col-lg-10 dashboard-content" id="dashboard">
+            <div class="welcome-box">
+                <h1>Welcome, <span id="welcomeName">Marvin</span>!</h1>
+                <p>Welcome to your personal student and inventory dashboard.</p>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-xl-3"><div class="stat-card"><div class="stat-icon">🎓</div><div><h6 id="stat1-title">Course</h6><h3 id="stat1-value">BSIT</h3></div></div></div>
+                <div class="col-md-6 col-xl-3"><div class="stat-card"><div class="stat-icon">📦</div><div><h6 id="stat2-title">Total Products</h6><h3 id="stat2-value">10</h3></div></div></div>
+                <div class="col-md-6 col-xl-3"><div class="stat-card"><div class="stat-icon">⚠️</div><div><h6 id="stat3-title">Low Stock</h6><h3 id="stat3-value">2</h3></div></div></div>
+                <div class="col-md-6 col-xl-3"><div class="stat-card"><div class="stat-icon">💰</div><div><h6 id="stat4-title">Inventory Value</h6><h3 id="stat4-value">₱0</h3></div></div></div>
+            </div>
+
+            <section id="inventory" class="dashboard-section">
+                <div class="section-title d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div><h2 class="mb-1">Inventory Management</h2><p class="text-muted mb-0">Search, filter, monitor, and export inventory.</p></div>
+                    <button id="exportButton" class="btn btn-primary">Export CSV</button>
+                </div>
+
+                <div id="lowStockAlert" class="mb-4"></div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6 col-lg-3"><label for="searchInput" class="form-label">Search</label><input id="searchInput" class="form-control" type="text" placeholder="Search product or SKU"></div>
+                    <div class="col-md-6 col-lg-2"><label for="categoryFilter" class="form-label">Category</label><select id="categoryFilter" class="form-select"><option value="all">All Categories</option></select></div>
+                    <div class="col-md-6 col-lg-2"><label for="statusFilter" class="form-label">Stock Status</label><select id="statusFilter" class="form-select"><option value="all">All Status</option><option value="in-stock">In Stock</option><option value="low-stock">Low Stock</option><option value="out-of-stock">Out of Stock</option></select></div>
+                    <div class="col-md-6 col-lg-2"><label for="minPrice" class="form-label">Min Price</label><input id="minPrice" class="form-control" type="number" min="0" placeholder="0"></div>
+                    <div class="col-md-6 col-lg-2"><label for="maxPrice" class="form-label">Max Price</label><input id="maxPrice" class="form-control" type="number" min="0" placeholder="No limit"></div>
+                    <div class="col-md-6 col-lg-1 d-flex align-items-end"><button id="resetButton" class="btn btn-outline-secondary w-100">Reset</button></div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Quantity</th><th>Unit Price</th><th>Reorder Level</th><th>Supplier</th><th>Status</th></tr></thead>
+                        <tbody id="inventoryTable"></tbody>
+                    </table>
+                </div>
+                <small class="text-muted" id="inventoryCount"></small>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title"><h2>Inventory Analytics</h2></div>
+                <div class="row g-4">
+                    <div class="col-lg-4"><div class="chart-card"><h5>Inventory by Category</h5><canvas id="categoryChart"></canvas></div></div>
+                    <div class="col-lg-4"><div class="chart-card"><h5>Stock Status</h5><canvas id="stockChart"></canvas></div></div>
+                    <div class="col-lg-4"><div class="chart-card"><h5>Top 5 Products by Inventory Value</h5><canvas id="topProductsChart"></canvas></div></div>
+                </div>
+            </section>
+
+            <section id="about" class="dashboard-section">
+                <div class="section-title"><h2>About Me</h2></div>
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center"><img src="image1.jpg" alt="Profile Picture" class="main-profile"></div>
+                    <div class="col-md-8">
+                        <p>Hello! My name is <strong>Marvin M. Meneses</strong>. I am a Bachelor of Science in Information Technology student with an interest in computers, technology, programming, and web development.</p>
+                        <p>I enjoy learning new technical skills and exploring how technology can be used to solve problems and create useful digital experiences.</p>
+                        <div class="info-box"><p><strong>Course:</strong> Bachelor of Science in Information Technology</p><p><strong>Interests:</strong> Web Development, Programming, Computer Technology, Gaming</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="skills" class="dashboard-section">
+                <div class="section-title"><h2>My Skills</h2></div>
+                <div class="row g-3">
+                    <div class="col-md-6"><div class="skill-card"><h5>HTML</h5><p>Creating the structure and content of webpages.</p></div></div>
+                    <div class="col-md-6"><div class="skill-card"><h5>CSS</h5><p>Designing webpages using layouts, colors, spacing, and responsive styles.</p></div></div>
+                    <div class="col-md-6"><div class="skill-card"><h5>Programming</h5><p>Learning programming concepts and developing logical solutions.</p></div></div>
+                    <div class="col-md-6"><div class="skill-card"><h5>Problem Solving</h5><p>Analyzing problems and finding practical solutions.</p></div></div>
+                </div>
+            </section>
+
+            <section id="projects" class="dashboard-section">
+                <div class="section-title"><h2>My Projects</h2></div>
+                <div class="row g-4">
+                    <div class="col-md-4"><div class="project-card"><div class="project-icon">🌐</div><h4>Personal Profile Website</h4><p>A personal webpage created using HTML and CSS to introduce myself, my interests, skills, and background.</p></div></div>
+                    <div class="col-md-4"><div class="project-card"><div class="project-icon">🎓</div><h4>Student Information System</h4><p>A proposed student information project designed to organize and display basic student records.</p></div></div>
+                    <div class="col-md-4"><div class="project-card"><div class="project-icon">💼</div><h4>Personal Portfolio</h4><p>A portfolio project designed to showcase my skills, school projects, interests, and progress.</p></div></div>
+                </div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title"><h2>Recent Activity</h2></div>
+                <div class="table-responsive"><table class="table table-hover"><thead><tr><th>Activity</th><th>Category</th><th>Status</th></tr></thead><tbody id="activityTable"></tbody></table></div>
+            </section>
+
+            <section class="dashboard-section">
+                <div class="section-title"><h2>Quick Facts</h2></div>
+                <div class="row g-3">
+                    <div class="col-md-4"><div class="fact-card"><h5>Favorite Quote</h5><p>"Success comes from learning, practicing, and improving."</p></div></div>
+                    <div class="col-md-4"><div class="fact-card"><h5>Hobby</h5><p>Playing games, exploring technology, and learning computer skills.</p></div></div>
+                    <div class="col-md-4"><div class="fact-card"><h5>Fun Fact</h5><p>I enjoy discovering how websites, applications, and computer systems work.</p></div></div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<footer id="contact" class="dashboard-footer">
+    <p>&copy; 2026 Marvin M. Meneses</p>
+    <p>Contact: <a href="mailto:marvin.meneses@email.com">marvin.meneses@email.com</a></p>
+    <p>Last Updated: September 2026</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/datamanager.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

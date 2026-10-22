@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking System | Dashboard</title>
+    <style>
+        :root {
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #172033;
+            background: #f4f7fb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body { margin: 0; }
+
+        
+header {
+    background: #142b4a;
+    color: white;
+    padding: 22px 6%;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.manage-button {
+    display: inline-block;
+    padding: 11px 16px;
+    background: white;
+    color: #142b4a;
+    text-decoration: none;
+    border-radius: 9px;
+    font-weight: 600;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.manage-button:hover {
+    background: #e6edf7;
+    transform: translateY(-1px);
+}
+
+
+        header h1 { margin: 0; font-size: 1.5rem; }
+        header p { margin: 6px 0 0; color: #cbd8e8; }
+
+        main {
+            width: min(1100px, 92%);
+            margin: 36px auto;
+        }
+
+        .welcome { margin-bottom: 24px; }
+        .welcome h2 { margin: 0 0 8px; }
+        .welcome p { margin: 0; color: #65728a; }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e4eaf2;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(20, 43, 74, .05);
+        }
+
+        .card-label {
+            color: #65728a;
+            font-size: .9rem;
+            margin-bottom: 14px;
+        }
+
+        .card-value {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .card-note {
+            color: #7c8799;
+            font-size: .82rem;
+            margin-top: 12px;
+        }
+
+        .status {
+            color: #52627a;
+            margin-top: 22px;
+            font-size: .88rem;
+        }
+
+        .status.error { color: #b42318; }
+
+        @media (max-width: 720px) {
+            .cards { grid-template-columns: 1fr; }
+            main { margin-top: 26px; }
+        }
+    </style>
+</head>
+<body>
+    
+<header class="main-header">
+    <div>
+        <h1>Banking System</h1>
+        <p>Account and transaction overview</p>
+    </div>
+
+    <a href="{{ route('accounts.index') }}" class="manage-button">
+        Manage Accounts
+    </a>
+</header>
+
+
+    <main>
+        <section class="welcome">
+            <h2>Dashboard</h2>
+            <p>Here is the current overview of your banking system.</p>
+        </section>
+
+        <section class="cards" aria-label="Banking statistics">
+            <article class="card">
+                <div class="card-label">Total Accounts</div>
+                <div class="card-value" id="total-accounts">—</div>
+                <div class="card-note">Registered bank accounts</div>
+            </article>
+
+            <article class="card">
+                <div class="card-label">Total Money in Bank</div>
+                <div class="card-value" id="total-money">—</div>
+                <div class="card-note">Combined balance of all accounts</div>
+            </article>
+
+            <article class="card">
+                <div class="card-label">Transactions Today</div>
+                <div class="card-value" id="total-transactions">—</div>
+                <div class="card-note">Transactions recorded today</div>
+            </article>
+        </section>
+
+        <p id="dashboard-status" class="status" role="status" aria-live="polite">
+            Loading dashboard statistics…
+        </p>
+    </main>
+
+    <script>
+        const statsUrl = '/api/dashboard/stats';
+
+        const pesoFormatter = new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        });
+
+        async function loadDashboardStats() {
+            const status = document.getElementById('dashboard-status');
+
+            try {
+                const response = await fetch(statsUrl, {
+                    headers: { 'Accept': 'application/json' },
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server returned HTTP ' + response.status);
+                }
+
+                const stats = await response.json();
+
+                document.getElementById('total-accounts').textContent =
+                    Number(stats.total_accounts).toLocaleString('en-PH');
+
+                document.getElementById('total-money').textContent =
+                    pesoFormatter.format(Number(stats.total_money_in_bank));
+
+                document.getElementById('total-transactions').textContent =
+                    Number(stats.total_transactions_today).toLocaleString('en-PH');
+
+                status.textContent =
+                    'Statistics updated at ' +
+                    new Date().toLocaleTimeString('en-PH') +
+                    '. Automatically refreshes every 30 seconds.';
+                status.classList.remove('error');
+            } catch (error) {
+                status.textContent =
+                    'Could not load statistics. Please check the server and try again.';
+                status.classList.add('error');
+                console.error('Dashboard statistics error:', error);
+            }
+        }
+
+        loadDashboardStats();
+        setInterval(loadDashboardStats, 30000);
+    </script>
+</body>
+</html>

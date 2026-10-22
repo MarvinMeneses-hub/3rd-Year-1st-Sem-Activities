@@ -1,10 +1,8 @@
-# Environment variables and secrets
+
+# Environment files and secrets
 .env
 .env.*
 !.env.example
-**/.env
-**/.env.*
-!**/.env.example
 
 # Credentials and private keys
 *.pem
@@ -12,44 +10,100 @@
 credentials.json
 secrets.json
 
-# Local database files and private exports
-*.sqlite
-*.sqlite3
-*.db
-*.dump
-*.bak
-
 # Dependencies
 vendor/
 node_modules/
 
-# User uploads and private submissions
-**/uploads/
-**/storage/app/private/
+# Local database files and private database exports
+*.sqlite
+*.sqlite3
+*.db
+*.sql
 
-# Logs, caches, and generated files
+# Uploaded submissions and user files
+**/uploads/
+
+# Generated logs and caches
 *.log
 .cache/
-**/storage/logs/
 **/storage/framework/cache/
 **/storage/framework/sessions/
 **/storage/framework/views/
-**/bootstrap/cache/
 
-# Local configuration containing secrets
-**/config/config.php
-**/config/mail.php
-
-# Local development tool metadata
-.freebuff/
-**/.freebuff/
-
-# Operating system files
+# Temporary and operating system files
+*.bin
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# Project backups
+
+# All SQL database exports and dumps
+*.sql
+
+# Project backup folders
 **/*-backup-*/
 **/*_backup*/
 **/backup/
+
+# Local environment and application configuration
+**/config/config.php
+**/config/mail.php
+
+# Local submissions and generated uploads
+**/uploads/
+
+# Laravel runtime files
+**/storage/logs/
+**/bootstrap/cache/
+
+# Local Google OAuth authentication files - review before publishing
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/google_login.php
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/google_callback.php
+/SYSTEM INTEGRATED ARCHITECTURE/ITayo/google_login.php
+/SYSTEM INTEGRATED ARCHITECTURE/ITayo/google_callback.php
+
+# Local development tool metadata
+/SYSTEM INTEGRATED ARCHITECTURE/ITayo/.freebuff/
+
+# Local development tool metadata
+/SYSTEM INTEGRATED ARCHITECTURE/ITayo/.freebuff/
+
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/test_email.php
+
+# Private LMS mail configuration and diagnostic scripts
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/config/mail.php
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/google_db_check.php
+/SYSTEM ANALYSIS DESIGN/EdubridgeAcademy/google_account.php
+/SYSTEM INTEGRATED ARCHITECTURE/ITayo/config/mail.php
+
+# Laravel local environment and secret-bearing configuration
+**/.env
+**/.env.*
+!**/.env.example
+**/config/services.php
+# Additional safeguards for public GitHub uploads
+*.sql
+*.sqlite*
+*.db
+*.dump
+*.bak
+*.old
+*.backup
+*.log
+*.pem
+*.key
+credentials.json
+secrets.json
+**/uploads/
+**/storage/app/private/
+**/*-backup-*/
+**/*_backup*/
+**/backup/
+**/.freebuff/
+**/config/config.php
+**/config/mail.php
+**/config/services.php
+**/google_login.php
+**/google_callback.php
+**/google_db_check.php
+**/google_account.php
+**/test_email.php

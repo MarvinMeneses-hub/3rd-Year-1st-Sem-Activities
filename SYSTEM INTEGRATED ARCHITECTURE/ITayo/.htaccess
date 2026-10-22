@@ -1,0 +1,13 @@
+
+Options -Indexes
+DirectoryIndex index.php
+
+# Protect private configuration and environment files.
+<FilesMatch "(?i)^(config\.php|mail\.php|\.env.*|composer\.(json|lock)|CLAUDE\.md|README.*|.*\.(sql|pem|key|bak|old|log|ini|conf|dist|example))$">
+    Require all denied
+</FilesMatch>
+
+# Protect renamed diagnostic scripts and development files.
+<FilesMatch "(?i)^(test_email\.php\.disabled|google_db_check\.php\.disabled)$">
+    Require all denied
+</FilesMatch>

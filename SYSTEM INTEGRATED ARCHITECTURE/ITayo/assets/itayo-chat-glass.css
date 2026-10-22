@@ -1,0 +1,156 @@
+/* =====================================================================
+   ITayo Soft Glass: chat page  (v1)
+   ---------------------------------------------------------------------
+   Loaded ONLY by chat/index.php, AFTER itayo-soft-glass.css (it reuses
+   that file's --ig-* colour tokens) and after the page's own <style>.
+   Visual changes only: no ids, classes, scripts, API calls or call
+   (WebRTC) logic are touched.
+
+   TO ROLL BACK: delete the two <link> lines this file and
+   itayo-soft-glass.css use in chat/index.php, and the two classes on <body>.
+   ===================================================================== */
+
+/* ---------- Page + heading ---------- */
+html body.itayo-glass.itayo-chat .chat-page{padding:clamp(16px,2.4vw,32px)}
+html body.itayo-glass.itayo-chat .chat-heading h1{font-weight:800;letter-spacing:-.04em;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .chat-heading p{font-size:15px;color:var(--ig-muted)}
+html body.itayo-glass.itayo-chat .back-link{
+  min-height:42px;border:1px solid var(--ig-line);border-radius:12px;
+  background:rgba(255,255,255,.80);color:var(--ig-rose-ink);
+  font-size:14px;font-weight:700;
+  transition:background .18s ease,border-color .18s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass.itayo-chat .back-link:hover{background:var(--ig-rose-soft);border-color:rgba(189,110,147,.35)}
+}
+
+/* ---------- Main glass panel ---------- */
+html body.itayo-glass.itayo-chat .chat-layout{
+  background:var(--ig-surface);
+  border:1px solid var(--ig-line);border-radius:24px;
+  box-shadow:0 18px 42px rgba(47,57,71,.10),inset 0 1px 0 rgba(255,255,255,.82);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  backdrop-filter:blur(18px) saturate(125%);
+}
+html body.itayo-glass.itayo-chat .chat-sidebar{border-right:1px solid var(--ig-line);background:rgba(255,255,255,.35)}
+@media (max-width:800px){
+  html body.itayo-glass.itayo-chat .chat-sidebar{border-right:0;border-bottom:1px solid var(--ig-line)}
+}
+
+/* ---------- Sidebar: profile, search, people ---------- */
+html body.itayo-glass.itayo-chat .profile-card{
+  background:var(--ig-rose-soft);border:1px solid rgba(189,110,147,.22);border-radius:16px;
+}
+html body.itayo-glass.itayo-chat .profile-info strong{font-size:14px;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .profile-info span{font-size:12px;color:var(--ig-muted)}
+html body.itayo-glass.itayo-chat .section-heading{font-family:var(--ig-display);font-size:14px;letter-spacing:-.02em;color:var(--ig-ink)}
+
+html body.itayo-glass.itayo-chat .search-box,
+html body.itayo-glass.itayo-chat .message-input{
+  font-family:var(--ig-font);font-size:14px;color:var(--ig-ink);
+  background-color:rgba(255,255,255,.86);
+  border:1px solid var(--ig-line);border-radius:12px;
+}
+html body.itayo-glass.itayo-chat .search-box::placeholder,
+html body.itayo-glass.itayo-chat .message-input::placeholder{color:#667180;opacity:1}
+html body.itayo-glass.itayo-chat .search-box:focus,
+html body.itayo-glass.itayo-chat .message-input:focus{
+  border-color:var(--ig-rose-strong);background-color:#fff;
+  box-shadow:0 0 0 4px rgba(217,140,174,.18);
+}
+
+html body.itayo-glass.itayo-chat .user-item{
+  background:transparent;border:1px solid transparent;border-radius:14px;
+  transition:background .18s ease,border-color .18s ease;
+}
+/* The people-search sets the "hidden" attribute, but .user-item's display:flex
+   overrides it. This makes the search actually hide people. */
+html body.itayo-glass.itayo-chat .user-item[hidden]{display:none}
+html body.itayo-glass.itayo-chat .user-item:hover{background:rgba(224,229,235,.6);border-color:transparent}
+html body.itayo-glass.itayo-chat .user-item.active{
+  background:var(--ig-rose-soft);border-color:rgba(189,110,147,.30);
+  box-shadow:inset 3px 0 var(--ig-rose);
+}
+html body.itayo-glass.itayo-chat .user-info strong{font-size:13px;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .user-info span{font-size:12px;color:var(--ig-muted)}
+html body.itayo-glass.itayo-chat .empty-users{font-size:14px;color:var(--ig-muted)}
+
+/* ---------- Conversation header + messages ---------- */
+html body.itayo-glass.itayo-chat .chat-topbar{border-bottom:1px solid var(--ig-line);background:rgba(255,255,255,.45)}
+html body.itayo-glass.itayo-chat .chat-topbar h2{font-size:16px;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .chat-topbar p{font-size:13px;color:var(--ig-muted)}
+html body.itayo-glass.itayo-chat .messages{background:rgba(246,248,250,.55)}
+
+html body.itayo-glass.itayo-chat .welcome-icon{
+  background:linear-gradient(145deg,#fff,#f8d9e8);color:var(--ig-rose-ink);
+  box-shadow:0 10px 24px rgba(207,111,152,.15);
+}
+html body.itayo-glass.itayo-chat .welcome-area h2{font-weight:800;letter-spacing:-.03em;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .welcome-area p{font-size:14px;color:var(--ig-muted)}
+
+html body.itayo-glass.itayo-chat .bubble{
+  font-size:14px;color:var(--ig-ink);
+  background:#fff;border:1px solid var(--ig-line);border-radius:16px 16px 16px 5px;
+}
+html body.itayo-glass.itayo-chat .mine .bubble{
+  color:#fff;border-color:transparent;border-radius:16px 16px 5px 16px;
+  background:linear-gradient(115deg,var(--ig-btn-a),var(--ig-btn-b));
+  box-shadow:0 6px 16px rgba(156,69,109,.20);
+}
+html body.itayo-glass.itayo-chat .bubble-name,
+html body.itayo-glass.itayo-chat .bubble-time{font-size:12px;color:var(--ig-muted)}
+
+/* ---------- Composer ---------- */
+html body.itayo-glass.itayo-chat .composer{border-top:1px solid var(--ig-line);background:rgba(255,255,255,.70)}
+html body.itayo-glass.itayo-chat .message-input{border-radius:14px;padding:13px 16px}
+html body.itayo-glass.itayo-chat .send-button{
+  min-height:46px;border-radius:14px;font-family:var(--ig-font);font-size:14px;
+  background:linear-gradient(115deg,var(--ig-btn-a),var(--ig-btn-b));
+  box-shadow:0 8px 18px rgba(156,69,109,.22),inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .16s ease,filter .16s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  html body.itayo-glass.itayo-chat .send-button:not(:disabled):hover{
+    background:linear-gradient(115deg,var(--ig-btn-a),var(--ig-btn-b));
+    filter:saturate(1.05);transform:translateY(-1px);
+  }
+}
+html body.itayo-glass.itayo-chat .send-button:disabled{box-shadow:none}
+
+/* Error notice stays red so errors read as errors (display is untouched: it is toggled by .show) */
+html body.itayo-glass.itayo-chat .notice{
+  background:#fae4e7;color:#9a3f4b;
+  border:1px solid rgba(154,63,75,.22);border-radius:12px;font-size:13px;
+}
+
+/* ---------- Voice / video call UI (looks only) ---------- */
+html body.itayo-glass.itayo-chat .call-btn{
+  font-family:var(--ig-font);font-size:13px;border-radius:11px;min-height:38px;
+  background:linear-gradient(115deg,var(--ig-btn-a),var(--ig-btn-b));color:#fff;
+}
+html body.itayo-glass.itayo-chat .call-btn.secondary{background:var(--ig-rose-soft);color:var(--ig-rose-ink);border:1px solid rgba(189,110,147,.25)}
+html body.itayo-glass.itayo-chat .call-btn.danger{background:#b42318;color:#fff}
+html body.itayo-glass.itayo-chat .call-panel,
+html body.itayo-glass.itayo-chat .incoming-call{
+  background:rgba(255,255,255,.92);border:1px solid var(--ig-line);border-radius:20px;
+  -webkit-backdrop-filter:blur(20px) saturate(130%);backdrop-filter:blur(20px) saturate(130%);
+  box-shadow:0 22px 60px rgba(47,57,71,.22);
+}
+html body.itayo-glass.itayo-chat .call-panel strong,
+html body.itayo-glass.itayo-chat .incoming-call strong{font-family:var(--ig-display);letter-spacing:-.02em;color:var(--ig-ink)}
+html body.itayo-glass.itayo-chat .call-status{font-size:14px;color:var(--ig-muted)}
+html body.itayo-glass.itayo-chat .call-videos video{background:#1f2530;border-radius:14px}
+
+/* ---------- Focus + small screens ---------- */
+html body.itayo-glass.itayo-chat .user-item:focus-visible,
+html body.itayo-glass.itayo-chat .call-btn:focus-visible,
+html body.itayo-glass.itayo-chat .send-button:focus-visible,
+html body.itayo-glass.itayo-chat .back-link:focus-visible{outline:3px solid rgba(189,110,147,.55);outline-offset:2px}
+@media (max-width:800px){
+  /* 16px stops iPhones zooming the page when a field is focused */
+  html body.itayo-glass.itayo-chat .search-box,html body.itayo-glass.itayo-chat .message-input{font-size:16px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html body.itayo-glass.itayo-chat *,html body.itayo-glass.itayo-chat *::before,html body.itayo-glass.itayo-chat *::after{animation:none!important;transition:none!important}
+}

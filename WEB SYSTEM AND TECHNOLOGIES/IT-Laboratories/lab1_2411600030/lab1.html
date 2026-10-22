@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lab Exercise 1</title>
+<!-- Google Fonts for better typography -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* Reset some default styles */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    max-width: 900px;
+    width: 100%;
+    padding: 40px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  h1 {
+    text-align: center;
+    color: #4A90E2;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .profile-image {
+    display: block;
+    margin: 0 auto 30px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid #4A90E2;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .profile-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .info p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    padding: 10px 15px;
+    background-color: #f7f9fb;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  .info p:hover {
+    background-color: #e0f7fa;
+    transform: translateX(5px);
+  }
+
+  p.description {
+    font-size: 1.1em;
+    text-align: center;
+    color: #555;
+    margin-top: 20px;
+  }
+
+  /* Add some responsiveness for smaller screens */
+  @media(max-width: 600px) {
+    .card {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+    }
+
+    .info p {
+      font-size: 1em;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Welcome to My First HTML Page</h1>
+    <img src="image1.jpg" alt="Profile Image" class="profile-image" />
+    <div class="info">
+      <p><strong>Name:</strong> Marvin M. Meneses</p>
+      <p><strong>Student ID:</strong> 2411600030</p>
+      <p><strong>Course:</strong> BS Information Technology</p>
+    </div>
+    <p class="description">This is my first HTML page created using Visual Studio Code and XAMPP. Designing with style for a modern look!</p>
+  </div>
+</body>
+</html>
