@@ -1,5 +1,7 @@
 # 3rd Year – 1st Semester Activities
 
+> **✨ Explore the Live Portfolio:** Check out my interactive portfolio dashboard at [marvinmeneses-hub.github.io/3rd-Year-1st-Sem-Activities/](https://marvinmeneses-hub.github.io/3rd-Year-1st-Sem-Activities/)
+
 Welcome to my academic portfolio for the **Bachelor of Science in Information Technology (BSIT), 3rd Year – 1st Semester**.
 
 This repository organizes my academic activities, laboratory exercises, system documentation, and software development projects by subject.
@@ -26,36 +28,5 @@ This repository organizes my academic activities, laboratory exercises, system d
 ├── WEB SYSTEM AND TECHNOLOGIES/
 │   └── README.md
 ├── .gitignore
+├── index.html
 └── README.md
-```
-
-Each subject folder contains its own documentation and relevant academic files.
-
-## Technologies
-
-Depending on the project, this portfolio may include:
-
-- HTML and CSS
-- JavaScript
-- PHP
-- Laravel
-- MySQL
-- SQLite
-- Git and GitHub
-
-## Objectives
-
-- Document my academic progress and practical activities.
-- Apply programming, database, and system design concepts.
-- Develop and improve software development skills.
-- Maintain an organized portfolio of my coursework and projects.
-
-## Academic Information
-
-- **Program:** Bachelor of Science in Information Technology
-- **Year Level:** 3rd Year
-- **Semester:** 1st Semester
-
----
-
-*Created for academic documentation and portfolio purposes.*
