@@ -107,3 +107,7 @@ secrets.json
 **/google_db_check.php
 **/google_account.php
 **/test_email.php
+
+# Preserve nested project Git histories locally; do not publish metadata
+**/.git/
+**/.git-*/
