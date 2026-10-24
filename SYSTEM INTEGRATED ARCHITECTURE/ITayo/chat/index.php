@@ -139,7 +139,7 @@ function chat_initials(string $first, string $last): string
 <div id="callPanel" class="call-panel hidden" role="dialog" aria-label="Call controls"><strong id="callPanelTitle">Call</strong><p id="callStatus" class="call-status">Connecting…</p><div class="call-videos"><video id="remoteVideo" autoplay playsinline></video><video id="localVideo" autoplay muted playsinline></video></div><div class="call-actions"><button class="call-btn secondary" id="muteButton" type="button">Mute mic</button><button class="call-btn secondary" id="cameraButton" type="button">Camera off</button><button class="call-btn danger" id="endCallButton" type="button">End call</button></div></div>
 <script>
 (() => {
-    const apiUrl = <?= json_encode(APP_URL . '/chat/api.php', JSON_UNESCAPED_SLASHES) ?>;
+    const apiUrl = new URL('api.php', window.location.href).href;
     const myId = <?= (int)$user['id'] ?>;
     const csrf = document.querySelector('meta[name="csrf-token"]').content;
     const search = document.getElementById('userSearch');
@@ -283,7 +283,8 @@ function chat_initials(string $first, string $last): string
     const incomingDescription = document.getElementById('incomingDescription');
     let activeCallId = 0, activeCallType = 'voice', peer = null, localStream = null;
     let signalAfterId = 0, callPollTimer = null, incomingPollTimer = null, incomingCallData = null;
-    let makingCall = false, remoteDescriptionSet = false;
+    let makingCall = false, remoteDescriptionSet = false, incomingPollBusy = false;
+    const pendingIceCandidates = [];
     const rtcConfig = {iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
     async function callRequest(action, payload = {}) {
         return request(`${apiUrl}?action=${action}`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,csrf})});
@@ -296,7 +297,12 @@ function chat_initials(string $first, string $last): string
     async function setupPeer() {
         peer = new RTCPeerConnection(rtcConfig);
         peer.onicecandidate = event => { if (event.candidate && activeCallId) sendSignal('candidate',event.candidate.toJSON()).catch(e=>showNotice(e.message)); };
-        peer.ontrack = event => { remoteVideo.srcObject = event.streams[0]; };
+        peer.ontrack = event => {
+            const stream = event.streams && event.streams[0];
+            if (!stream) return;
+            remoteVideo.srcObject = stream;
+            remoteVideo.play().catch(() => setCallStatus('Remote video is ready. Tap the video to start playback if it does not begin automatically.'));
+        };
         peer.onconnectionstatechange = () => {
             if (!peer) return;
             if (peer.connectionState === 'connected') setCallStatus('Connected');
@@ -332,7 +338,9 @@ function chat_initials(string $first, string $last): string
     }
     async function acceptIncoming() {
         if (!incomingCallData) return;
-        const item = incomingCallData; incomingCall.classList.add('hidden');
+        const item = incomingCallData;
+        incomingCallData = null;
+        incomingCall.classList.add('hidden');
         try {
             activeCallId = Number(item.call_id); activeCallType = item.call_type; signalAfterId = 0;
             await acquireMedia(activeCallType);
@@ -347,12 +355,24 @@ function chat_initials(string $first, string $last): string
             if (signal.signal_type === 'offer') {
                 if (!peer) await setupPeer();
                 await peer.setRemoteDescription(new RTCSessionDescription(signal.payload)); remoteDescriptionSet = true;
+                while (pendingIceCandidates.length) {
+                    const candidate = pendingIceCandidates.shift();
+                    try { await peer.addIceCandidate(new RTCIceCandidate(candidate)); } catch (e) { console.warn('Queued ICE candidate was not accepted', e); }
+                }
                 const answer = await peer.createAnswer(); await peer.setLocalDescription(answer);
                 await sendSignal('answer',peer.localDescription.toJSON()); setCallStatus('Connecting…');
             } else if (signal.signal_type === 'answer' && peer && !peer.currentRemoteDescription) {
                 await peer.setRemoteDescription(new RTCSessionDescription(signal.payload)); remoteDescriptionSet = true;
-            } else if (signal.signal_type === 'candidate' && peer && remoteDescriptionSet) {
-                try { await peer.addIceCandidate(new RTCIceCandidate(signal.payload)); } catch(e) { console.warn('ICE candidate was not accepted',e); }
+                while (pendingIceCandidates.length) {
+                    const candidate = pendingIceCandidates.shift();
+                    try { await peer.addIceCandidate(new RTCIceCandidate(candidate)); } catch (e) { console.warn('Queued ICE candidate was not accepted', e); }
+                }
+            } else if (signal.signal_type === 'candidate' && peer) {
+                if (!remoteDescriptionSet) {
+                    pendingIceCandidates.push(signal.payload);
+                } else {
+                    try { await peer.addIceCandidate(new RTCIceCandidate(signal.payload)); } catch(e) { console.warn('ICE candidate was not accepted',e); }
+                }
             } else if (signal.signal_type === 'decline') {
                 setCallStatus('The other person declined the call.'); await cleanupCall(false); return;
             } else if (signal.signal_type === 'end') {
@@ -374,6 +394,10 @@ function chat_initials(string $first, string $last): string
     async function cleanupCall(notifyServer=false, signalType='end') {
         const oldId = activeCallId;
         activeCallId = 0;
+        incomingCallData = null;
+        incomingCall.classList.add('hidden');
+        pendingIceCandidates.length = 0;
+        remoteDescriptionSet = false;
         if (callPollTimer) clearInterval(callPollTimer); callPollTimer = null;
         if (peer) { peer.onicecandidate=null; peer.ontrack=null; peer.close(); peer=null; }
         if (localStream) localStream.getTracks().forEach(track=>track.stop()); localStream=null;
@@ -381,7 +405,8 @@ function chat_initials(string $first, string $last): string
         if (notifyServer && oldId) { try { await callRequest('call-end',{call_id:oldId,signal_type:signalType}); } catch(e) { showNotice(e.message); } }
     }
     async function pollIncoming() {
-        if (activeCallId || incomingCallData) return;
+        if (activeCallId || incomingCallData || incomingPollBusy || document.hidden) return;
+        incomingPollBusy = true;
         try {
             const data = await request(`${apiUrl}?action=call-poll`);
             if (data.incoming && data.incoming.length) {
@@ -391,6 +416,7 @@ function chat_initials(string $first, string $last): string
                 incomingCall.classList.remove('hidden');
             }
         } catch(e) { console.warn('Incoming call check failed',e); }
+        finally { incomingPollBusy = false; }
     }
     voiceCallButton.addEventListener('click',()=>startCall('voice'));
     videoCallButton.addEventListener('click',()=>startCall('video'));
@@ -410,7 +436,9 @@ function chat_initials(string $first, string $last): string
         const track=localStream.getVideoTracks()[0]; if (!track) { setCallStatus('This is a voice-only call.'); return; }
         track.enabled=!track.enabled; event.currentTarget.textContent=track.enabled?'Camera off':'Camera on';
     });
-    incomingPollTimer = setInterval(pollIncoming,2000);
+    pollIncoming();
+    incomingPollTimer = setInterval(pollIncoming,1500);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) pollIncoming(); });
 
     composer.addEventListener('submit', async event => {
         event.preventDefault();
