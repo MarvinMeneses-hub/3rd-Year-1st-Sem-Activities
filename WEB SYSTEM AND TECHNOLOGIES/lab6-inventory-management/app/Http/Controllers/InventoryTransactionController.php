@@ -64,10 +64,6 @@ class InventoryTransactionController extends Controller
             'submission_token' => ['required', 'uuid'],
         ]);
 
-        /*
-         * If this form submission was already processed,
-         * do not create another transaction or update stock again.
-         */
         if (InventoryTransaction::where('submission_token', $validated['submission_token'])->exists()) {
             return redirect()
                 ->route('transactions.index')
@@ -101,6 +97,8 @@ class InventoryTransactionController extends Controller
                     ]);
                 }
 
+                // The InventoryTransactionObserver handles the stock update.
+                // Do not update the product quantity here, or stock changes twice.
                 InventoryTransaction::create([
                     'product_id' => $product->id,
                     'user_id' => auth()->id(),
@@ -112,11 +110,6 @@ class InventoryTransactionController extends Controller
                 ]);
             });
         } catch (QueryException $exception) {
-            /*
-             * A unique-token conflict can happen if two identical
-             * requests arrive at nearly the same time.
-             * Only treat it as a duplicate if that token now exists.
-             */
             $alreadyRecorded = InventoryTransaction::where(
                 'submission_token',
                 $validated['submission_token']

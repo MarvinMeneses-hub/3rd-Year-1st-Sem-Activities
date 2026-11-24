@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -72,11 +71,11 @@
                         Inventory Summary
                     </h3>
                     <p class="mt-1 text-sm text-slate-500">
-                        A quick overview of your current stock.
+                        A quick overview of your current stock and purchase orders.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
 
                     {{-- Total products --}}
                     <div class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
@@ -154,6 +153,26 @@
                         </div>
                     </div>
 
+                    {{-- Pending purchase orders --}}
+                    <a href="{{ route('purchase-orders.index') }}"
+                       class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-500">Pending Orders</p>
+                                <p class="mt-3 text-4xl font-extrabold tracking-tight text-violet-600">
+                                    {{ number_format($dashboardWidgets['pendingPurchaseOrders'] ?? 0) }}
+                                </p>
+                                <p class="mt-2 text-xs text-slate-500">Awaiting approval</p>
+                            </div>
+                            <div class="rounded-2xl bg-violet-50 p-3 text-2xl">
+                                🛒
+                            </div>
+                        </div>
+                        <div class="mt-5 h-1.5 overflow-hidden rounded-full bg-violet-50">
+                            <div class="h-full w-full rounded-full bg-violet-500"></div>
+                        </div>
+                    </a>
+
                 </div>
             </section>
 
@@ -167,7 +186,9 @@
                             <div class="rounded-xl bg-amber-50 p-3 text-xl">🟠</div>
                             <div>
                                 <h3 class="font-extrabold text-slate-900">Low Stock Alerts</h3>
-                                <p class="mt-1 text-xs text-slate-500">Products with 1–5 units remaining</p>
+                                <p class="mt-1 text-xs text-slate-500">
+                                    Products at or below their configured reorder level
+                                </p>
                             </div>
                         </div>
                         <span class="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
@@ -190,7 +211,9 @@
                             <div class="py-8 text-center">
                                 <div class="text-4xl">✅</div>
                                 <p class="mt-3 font-bold text-slate-800">No low-stock products</p>
-                                <p class="mt-1 text-sm text-slate-500">Products with 1–5 units will appear here.</p>
+                                <p class="mt-1 text-sm text-slate-500">
+                                    Products at or below their reorder level will appear here.
+                                </p>
                             </div>
                         @endforelse
                     </div>
@@ -271,6 +294,18 @@
                             <p class="mt-1 text-sm text-slate-500">Register a new inventory item</p>
                         </div>
                         <span class="text-xl text-slate-400 transition group-hover:translate-x-1 group-hover:text-emerald-600">→</span>
+                    </a>
+
+                    <a href="{{ route('purchase-orders.index') }}"
+                       class="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-violet-300 hover:shadow-lg">
+                        <div class="rounded-xl bg-violet-50 p-4 text-2xl transition group-hover:bg-violet-100">
+                            🛒
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="font-bold text-slate-900">Purchase Orders</p>
+                            <p class="mt-1 text-sm text-slate-500">Review and manage supplier orders</p>
+                        </div>
+                        <span class="text-xl text-slate-400 transition group-hover:translate-x-1 group-hover:text-violet-600">→</span>
                     </a>
 
                     <a href="{{ route('profile.edit') }}"
